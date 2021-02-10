@@ -33,7 +33,7 @@ class AxeAudit extends Audit {
     // Indicate if a test is not applicable.
     // This means aXe did not find any nodes which matched these checks.
     // Note in Lighthouse we use the phrasing "Not Applicable" (aXe uses "inapplicable", which sounds weird).
-    const notApplicables = artifacts.Accessibility.notApplicable;
+    const notApplicables = artifacts.Accessibility.notApplicable || [];
     const isNotApplicable = notApplicables.find(result => result.id === this.meta.id);
     if (isNotApplicable) {
       return {
@@ -45,7 +45,7 @@ class AxeAudit extends Audit {
     // Detect errors reported within aXe 'incomplete' results
     // aXe uses this result type to indicate errors, or rules which require manual investigation
     // If aXe reports an error, then bubble it up to the caller
-    const incomplete = artifacts.Accessibility.incomplete;
+    const incomplete = artifacts.Accessibility.incomplete || [];
     const incompleteResult = incomplete.find(result => result.id === this.meta.id);
     if (incompleteResult && incompleteResult.error) {
       return {
@@ -55,7 +55,7 @@ class AxeAudit extends Audit {
     }
 
     const isInformative = this.meta.scoreDisplayMode === Audit.SCORING_MODES.INFORMATIVE;
-    const violations = artifacts.Accessibility.violations;
+    const violations = artifacts.Accessibility.violations || [];
     const failureCases = isInformative ? violations.concat(incomplete) : violations;
     const rule = failureCases.find(result => result.id === this.meta.id);
     const impact = rule && rule.impact;
