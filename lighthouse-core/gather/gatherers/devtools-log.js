@@ -23,10 +23,10 @@ class DevtoolsLog extends FRGatherer {
     supportedModes: ['timespan', 'navigation'],
   };
 
-  _messageLog = new MessageLog(/^(Page|Network)\./);
-
   constructor() {
     super();
+
+    this._messageLog = new MessageLog(/^(Page|Network)\./);
 
     /** @param {LH.Protocol.RawEventMessage} e */
     this._onProtocolMessage = e => this._messageLog.record(e);
